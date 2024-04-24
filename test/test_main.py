@@ -59,7 +59,7 @@ class TestRegisterUser(unittest.TestCase):
             "email": "notanemail",
             "password": "validPassword123"
         })
-        assert response.status_code == 422  # Проверка на некорректный формат email
+        assert response.status_code == 422
         assert "value is not a valid email address" in response.json()["detail"][0]["msg"]
 
 
