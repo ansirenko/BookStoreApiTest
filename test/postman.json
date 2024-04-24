@@ -1,0 +1,1174 @@
+{
+	"info": {
+		"_postman_id": "08500a9e-175c-4451-b9ad-af50efac29e4",
+		"name": "BookStore",
+		"description": "## **User Authentication**\n\n### Description\n\nThis collection contains API endpoints for handling user registration and login processes. Each request is designed to test different scenarios including successful registration, login with correct and incorrect credentials, and error handling for non-existent user scenarios.\n\n**Endpoints Included:**\n\n- **POST /users/register**: Tests user registration with various input scenarios such as valid registration, duplicate email, and validation errors for data like passwords and usernames.\n    \n- **POST /users/login**: Tests user login with correct credentials, incorrect password, and non-existent email address.\n    \n\n**Use Case:**  \nThis collection is useful for developers and testers to ensure that the user authentication system is robust, handles errors gracefully, and secures user data appropriately.\n\n## **Book Search**\n\n### Description\n\nThis collection is designed to test the book search functionality of our API. It includes various tests that simulate searching for books using different queries and checks the system's response to both valid and invalid search inputs.\n\n**Endpoints Included:**\n\n- **GET /books?query=gatsby**: Tests searching for books related to \"The Great Gatsby\".\n    \n- **GET /books?query=tolkien**: Tests responses when searching for books by \"J.R.R. Tolkien\".\n    \n- **GET /books?query=**: Tests the API's handling of empty search queries.\n    \n- **GET /books**: Tests the API's response when no query parameter is provided at all.\n    \n\n**Use Case:**  \nThis collection helps ensure that the search functionality works correctly across different scenarios, returning appropriate results and handling edge cases like empty or missing queries.\n\n## **Shopping Cart and Checkout**\n\n### Description\n\nThis collection covers API endpoints related to the shopping cart and checkout process. It includes tests for adding items to the cart, checking out purchases, and handling potential errors during these processes.\n\n**Endpoints Included:**\n\n- **POST /users/{userId}/cart**: Tests adding books to a user's shopping cart, including scenarios with valid and invalid user IDs, and valid and invalid book IDs.\n    \n- **POST /users/{userId}/checkout**: Tests the checkout process with various conditions like valid checkout, checkout with an empty cart, and error handling for out-of-stock items or server errors.\n    \n\n**Use Case:**  \nThe collection is essential for validating that the shopping cart and checkout functionalities are fully operational, ensuring a smooth user experience and handling potential errors that could occur during the purchasing process.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "34496430"
+	},
+	"item": [
+		{
+			"name": "Register User - Successful Registration",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful registration\", function () {",
+							"    // pm.environment.set(\"username\", \"validUser\");",
+							"    // pm.environment.set(\"email\", \"newuser@example.com\");",
+							"    // pm.environment.set(\"password\", \"validPassword123\");",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true,",
+							"        \"userId\": 1",
+							"    });",
+							"});",
+							"",
+							"// pm.test(\"Registration with duplicate email\", function () {",
+							"//     pm.environment.set(\"username\", \"validUser\");",
+							"//     pm.environment.set(\"email\", \"existing@example.com\");",
+							"//     pm.environment.set(\"password\", \"validPassword123\");",
+							"//     var jsonData = pm.response.json();",
+							"//     pm.expect(pm.response.code).to.be.eq(200);",
+							"//     pm.expect(jsonData).to.deep.equal({",
+							"//         \"success\": false,",
+							"//         \"message\": \"Email already in use\"",
+							"//     });",
+							"// });",
+							"",
+							"// pm.test(\"Registration with short password\", function () {",
+							"//     pm.environment.set(\"username\", \"validUser\");",
+							"//     pm.environment.set(\"email\", \"newuser@example.com\");",
+							"//     pm.environment.set(\"password\", \"short\");",
+							"//     var jsonData = pm.response.json();",
+							"//     pm.expect(pm.response.code).to.be.eq(422);",
+							"//     pm.expect(jsonData).to.deep.equal({",
+							"//         'detail': [{",
+							"//             'ctx': {'error': {}},",
+							"//             'input': 'short',",
+							"//             'loc': ['body', 'password'],",
+							"//             'msg': 'Value error, Password must be at least 8 characters long',",
+							"//             'type': 'value_error'",
+							"//         }]",
+							"//     });",
+							"// });",
+							"",
+							"// pm.test(\"Registration without username\", function () {",
+							"//     pm.environment.set(\"username\", \"\");",
+							"//     pm.environment.set(\"email\", \"newuser@example.com\");",
+							"//     pm.environment.set(\"password\", \"validPassword123\");",
+							"//     var jsonData = pm.response.json();",
+							"//     pm.expect(pm.response.code).to.be.eq(400);",
+							"//     pm.expect(jsonData).to.deep.equal({",
+							"//         \"detail\": \"Username is required\"",
+							"//     });",
+							"// });",
+							"",
+							"// pm.test(\"Registration with invalid email\", function () {",
+							"//     pm.environment.set(\"username\", \"validUser\");",
+							"//     pm.environment.set(\"email\", \"notanemail\");",
+							"//     pm.environment.set(\"password\", \"validPassword123\");",
+							"//     var jsonData = pm.response.json();",
+							"//     pm.expect(pm.response.code).to.be.eq(422);",
+							"//     pm.expect(jsonData.detail[0].msg).to.include(\"value is not a valid email address\");",
+							"// });"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"validUser\");",
+							"pm.environment.set(\"email\", \"newuser@example.com\");",
+							"pm.environment.set(\"password\", \"validPassword123\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User - Duplicate Email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Registration with duplicate email\", function () {",
+							"    pm.environment.set(\"username\", \"validUser\");",
+							"    pm.environment.set(\"email\", \"existing@example.com\");",
+							"    pm.environment.set(\"password\", \"validPassword123\");",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": false,",
+							"        \"message\": \"Email already in use\"",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"validUser\");",
+							"pm.environment.set(\"email\", \"existing@example.com\");",
+							"pm.environment.set(\"password\", \"validPassword123\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User - Short Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Registration without username\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(400);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"Username is required\"",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"\");",
+							"pm.environment.set(\"email\", \"newuser@example.com\");",
+							"pm.environment.set(\"password\", \"validPassword123\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Register User - Missing Username",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Registration with invalid email\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(422);",
+							"    pm.expect(jsonData.detail[0].msg).to.include(\"value is not a valid email address\");",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"username\", \"validUser\");",
+							"pm.environment.set(\"email\", \"notanemail\");",
+							"pm.environment.set(\"password\", \"validPassword123\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\": \"{{username}}\",\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/register"
+			},
+			"response": []
+		},
+		{
+			"name": "Login - Succesfull Login",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful login\", function () {",
+							"    pm.environment.set(\"email\", \"user@example.com\");",
+							"    pm.environment.set(\"password\", \"correctpassword\");",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true,",
+							"        \"token\": \"some_jwt_token_here\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"email\", \"user@example.com\");",
+							"pm.environment.set(\"password\", \"correctpassword\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Login - Incorrect Password",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login with incorrect password\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(401);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"Incorrect password\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"email\", \"user@example.com\");",
+							"pm.environment.set(\"password\", \"wrongpassword\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Login - Nonexistent Email",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login with nonexistent email\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(404);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"User not found\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"email\", \"nonexistent@example.com\");",
+							"pm.environment.set(\"password\", \"any_password\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"email\": \"{{email}}\",\n    \"password\": \"{{password}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/login"
+			},
+			"response": []
+		},
+		{
+			"name": "Books - The Great Gatsby",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Search books - The Great Gatsby\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true,",
+							"        \"books\": [{\"id\": 1, \"title\": \"The Great Gatsby\", \"author\": \"F. Scott Fitzgerald\"}]",
+							"    });",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"query\", \"gatsby\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/books?query={{query}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{{query}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books - The Lord of The Rings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Search books - The Lord of the Rings\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true, ",
+							"        \"books\": [{\"id\": 2, \"title\": \"The Lord of the Rings\", \"author\": \"J.R.R. Tolkien\"}]",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"query\", \"tolkien\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/books?query={{query}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{{query}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books - Empty Query",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Search books with empty query\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(400);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"Search query cannot be empty\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"query\", \"\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/books?query={{query}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{{query}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Books - No Results",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Search books with no results\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true,",
+							"        \"books\": []",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"query\", \"nonexistent\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{url}}/books?query={{query}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"books"
+					],
+					"query": [
+						{
+							"key": "query",
+							"value": "{{query}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add to cart success\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true,",
+							"        \"message\": \"Book 100 added to user 1's cart\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 1);",
+							"pm.environment.set(\"bookId\", 100);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": {{bookId}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/cart"
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Invalid User Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add to cart with invalid user ID\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(404);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"User not found\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 0);",
+							"pm.environment.set(\"bookId\", 100);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": {{bookId}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/cart"
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Invalid Book Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add to cart with invalid book ID\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(400);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"Invalid book ID\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 1);",
+							"pm.environment.set(\"bookId\", 0);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": {{bookId}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/cart"
+			},
+			"response": []
+		},
+		{
+			"name": "Cart - Server Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Add to cart with server error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(500);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"Server error while adding to cart\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 999);",
+							"pm.environment.set(\"bookId\", 100);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "",
+						"value": "",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"bookId\": {{bookId}}\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/cart"
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout - Success",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Checkout success\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": true,",
+							"        \"amount\": 29.99",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 3);",
+							"pm.environment.set(\"payment_method\", \"credit_card\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payment_method\": \"{{payment_method}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/checkout"
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout - User Not Found",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Checkout user not found\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(404);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"User not found\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 0);",
+							"pm.environment.set(\"payment_method\", \"credit_card\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payment_method\": \"{{payment_method}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/checkout"
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout - Cart Empty",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Checkout cart empty\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": false,",
+							"        \"message\": \"Cart is empty\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 1);",
+							"pm.environment.set(\"payment_method\", \"credit_card\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payment_method\": \"{{payment_method}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/checkout"
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout - Item Out Of Stock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Checkout item out of stock\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(200);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"success\": false,",
+							"        \"message\": \"Item out of stock\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 2);",
+							"pm.environment.set(\"payment_method\", \"credit_card\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payment_method\": \"{{payment_method}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/checkout"
+			},
+			"response": []
+		},
+		{
+			"name": "Checkout - Server Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Checkout server error\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(pm.response.code).to.be.eq(500);",
+							"    pm.expect(jsonData).to.deep.equal({",
+							"        \"detail\": \"Server error during checkout\"",
+							"    });",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"userId\", 999);",
+							"pm.environment.set(\"payment_method\", \"credit_card\");"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"payment_method\": \"{{payment_method}}\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{url}}/users/{{userId}}/checkout"
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "basic",
+		"basic": {
+			"password": "{{password}}",
+			"username": "user@example.com"
+		}
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "password",
+			"value": "correctpassword",
+			"type": "string"
+		},
+		{
+			"key": "userId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "username",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "query",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "bookId",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "payment_method",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "url",
+			"value": "0.0.0.0:8000",
+			"type": "string"
+		}
+	]
+}

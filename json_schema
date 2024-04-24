@@ -1,0 +1,57 @@
+// POST /users/register request
+{
+  "username": "new_user",
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+
+// POST /users/register response
+{
+  "success": true,
+  "userId": 1
+}
+
+// POST /users/login request
+{
+  "email": "user@example.com",
+  "password": "securepassword123"
+}
+
+// POST /users/login response
+{
+  "success": true,
+  "token": "some_jwt_token_here"
+}
+
+// GET /books?search=query
+{
+  "success": true,
+  "books": [
+    {
+      "id": 1,
+      "title": "The Great Gatsby",
+      "author": "F. Scott Fitzgerald"
+    }
+  ]
+}
+
+// POST /users/{userId}/cart request
+{
+  "bookId": 1
+}
+
+// POST /users/{userId}/cart response
+{
+  "success": true
+}
+
+// POST /users/{userId}/checkout request
+{
+  "payment_method": "credit_card",
+}
+
+// POST /users/{userId}/checkout response
+{
+  "success": true,
+  "amount": 29.99
+}
